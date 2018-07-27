@@ -19,10 +19,12 @@ package com.google.samples.apps.sunflower.viewmodels
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import com.google.samples.apps.sunflower.PlantDetailFragment
 import com.google.samples.apps.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.sunflower.data.Plant
 import com.google.samples.apps.sunflower.data.PlantRepository
+import javax.inject.Inject
 
 /**
  * The ViewModel used in [PlantDetailFragment].
@@ -50,5 +52,19 @@ class PlantDetailViewModel(
 
     fun addPlantToGarden() {
         gardenPlantingRepository.createGardenPlanting(plantId)
+    }
+
+    class Factory
+    @Inject constructor(
+        private val plantRepository: PlantRepository,
+        private val gardenPlantingRepository: GardenPlantingRepository
+    ) {
+        fun create(plantId: String): ViewModelProvider.Factory {
+            return PlantDetailViewModelFactory(
+                    plantRepository,
+                    gardenPlantingRepository,
+                    plantId
+            )
+        }
     }
 }

@@ -31,15 +31,19 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-
+import codegraft.inject.AndroidInject
 import com.google.samples.apps.sunflower.databinding.FragmentPlantDetailBinding
-import com.google.samples.apps.sunflower.utilities.InjectorUtils
 import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
+import javax.inject.Inject
 
 /**
  * A fragment representing a single Plant detail screen.
  */
+@AndroidInject
 class PlantDetailFragment : Fragment() {
+
+    @Inject lateinit
+    var plantDetailViewModelFactory: PlantDetailViewModel.Factory
 
     private lateinit var shareText: String
 
@@ -49,8 +53,7 @@ class PlantDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val plantId = PlantDetailFragmentArgs.fromBundle(arguments).plantId
-
-        val factory = InjectorUtils.providePlantDetailViewModelFactory(requireActivity(), plantId)
+        val factory = plantDetailViewModelFactory.create(plantId)
         val plantDetailViewModel = ViewModelProviders.of(this, factory)
                 .get(PlantDetailViewModel::class.java)
 

@@ -20,14 +20,18 @@ import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import codegraft.inject.android.BindViewModel
 import com.google.samples.apps.sunflower.PlantListFragment
 import com.google.samples.apps.sunflower.data.Plant
 import com.google.samples.apps.sunflower.data.PlantRepository
+import javax.inject.Inject
 
 /**
  * The ViewModel for [PlantListFragment].
  */
-class PlantListViewModel internal constructor(
+@BindViewModel
+class PlantListViewModel
+@Inject internal constructor(
     private val plantRepository: PlantRepository
 ) : ViewModel() {
 

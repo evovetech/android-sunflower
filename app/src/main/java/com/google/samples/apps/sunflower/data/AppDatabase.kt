@@ -25,6 +25,7 @@ import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.samples.apps.sunflower.utilities.DATABASE_NAME
+import com.google.samples.apps.sunflower.utilities.appComponent
 import com.google.samples.apps.sunflower.workers.SeedDatabaseWorker
 
 /**
@@ -37,14 +38,13 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
 
     companion object {
-
-        // For Singleton instantiation
-        @Volatile private var instance: AppDatabase? = null
-
         fun getInstance(context: Context): AppDatabase {
-            return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
-            }
+            val component = context.appComponent
+            return component.database
+        }
+
+        fun create(context: Context): AppDatabase {
+            return buildDatabase(context)
         }
 
         // Create and pre-populate the database. See this article for more details:

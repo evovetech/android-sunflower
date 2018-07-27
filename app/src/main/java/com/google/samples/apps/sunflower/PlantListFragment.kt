@@ -17,7 +17,6 @@
 package com.google.samples.apps.sunflower
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
@@ -27,13 +26,21 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import codegraft.inject.AndroidInject
+import codegraft.inject.android.ViewModelInstanceProvider
+import codegraft.inject.android.viewModelDelegate
 import com.google.samples.apps.sunflower.adapters.PlantAdapter
-import com.google.samples.apps.sunflower.utilities.InjectorUtils
 import com.google.samples.apps.sunflower.viewmodels.PlantListViewModel
+import javax.inject.Inject
 
+@AndroidInject
 class PlantListFragment : Fragment() {
 
-    private lateinit var viewModel: PlantListViewModel
+    @Inject lateinit
+    var viewModelProvider: ViewModelInstanceProvider<PlantListFragment>
+
+    private
+    val viewModel: PlantListViewModel by viewModelDelegate(this::viewModelProvider)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,11 +48,6 @@ class PlantListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_plant_list, container, false)
-        val context = context ?: return view
-
-        val factory = InjectorUtils.providePlantListViewModelFactory(context)
-        viewModel = ViewModelProviders.of(this, factory).get(PlantListViewModel::class.java)
-
         val adapter = PlantAdapter()
         view.findViewById<RecyclerView>(R.id.plant_list).adapter = adapter
         subscribeUi(adapter)

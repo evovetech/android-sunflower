@@ -17,7 +17,6 @@
 package com.google.samples.apps.sunflower
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
@@ -25,11 +24,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import codegraft.inject.AndroidInject
+import codegraft.inject.android.ViewModelInstanceProvider
+import codegraft.inject.android.viewModelDelegate
 import com.google.samples.apps.sunflower.adapters.GardenPlantingAdapter
-import com.google.samples.apps.sunflower.utilities.InjectorUtils
 import com.google.samples.apps.sunflower.viewmodels.GardenPlantingListViewModel
+import javax.inject.Inject
 
+@AndroidInject
 class GardenFragment : Fragment() {
+
+    @Inject lateinit
+    var viewModelProvider: ViewModelInstanceProvider<GardenFragment>
+
+    val viewModel: GardenPlantingListViewModel
+            by viewModelDelegate(this::viewModelProvider)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,10 +53,6 @@ class GardenFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: GardenPlantingAdapter) {
-        val factory = InjectorUtils.provideGardenPlantingListViewModelFactory(requireContext())
-        val viewModel = ViewModelProviders.of(this, factory)
-                .get(GardenPlantingListViewModel::class.java)
-
         viewModel.gardenPlantings.observe(viewLifecycleOwner, Observer { plantings ->
             if (plantings != null && plantings.isNotEmpty()) {
                 activity?.run {

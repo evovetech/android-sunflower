@@ -37,13 +37,7 @@ class GardenPlantingRepository private constructor(
     fun getPlantAndGardenPlantings() = gardenPlantingDao.getPlantAndGardenPlantings()
 
     companion object {
-
-        // For Singleton instantiation
-        @Volatile private var instance: GardenPlantingRepository? = null
-
-        fun getInstance(gardenPlantingDao: GardenPlantingDao) =
-                instance ?: synchronized(this) {
-                    instance ?: GardenPlantingRepository(gardenPlantingDao).also { instance = it }
-                }
+        fun create(gardenPlantingDao: GardenPlantingDao) =
+                GardenPlantingRepository(gardenPlantingDao)
     }
 }

@@ -19,10 +19,14 @@ package com.google.samples.apps.sunflower.viewmodels
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import codegraft.inject.android.BindViewModel
 import com.google.samples.apps.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
+import javax.inject.Inject
 
-class GardenPlantingListViewModel internal constructor(
+@BindViewModel
+class GardenPlantingListViewModel
+@Inject internal constructor(
     gardenPlantingRepository: GardenPlantingRepository
 ) : ViewModel() {
 
